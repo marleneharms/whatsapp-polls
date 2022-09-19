@@ -6,8 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!--  import tailwind css -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Import chartjs -->
-    <script> src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"</script>
     <title>WhatsPoll</title>
 </head>
 
@@ -27,10 +25,164 @@
             <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
                 <a href="/people.html" class="mr-5 hover:text-indigo-500">Groups</a>
                 <a href="/people.html" class="mr-5 hover:text-indigo-500">People</a>
-                <a href="/index.html" class="mr-5 hover:text-indigo-500">Polls</a>
+                <a href="/create.html" class="mr-5 hover:text-indigo-500">Polls</a>
             </nav>
         </div>
     </header>
+
+    <main class="container mx-auto p-5">
+        <!-- Individual poll report with chart js -->
+        <h1 class="font-bold text-xl md:text-3xl mb-2 text-indigo-600">User Engagement Poll</h1>
+        <p> Number of people: 10 <br>
+            Group: Interns <br>
+            Created: 10/10/2022
+        </p>
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/2 p-5">
+                <div class="bg-gray-800 p-5 rounded">
+                    <canvas id="myChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 p-5">
+                <div class="bg-gray-800 p-5 rounded">
+                    <canvas id="myChart2" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/2 p-5">
+                <div class="bg-gray-800 p-5 rounded">
+                    <canvas id="myChart3" width="400" height="400"></canvas>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 p-5">
+                <div class="bg-gray-800 p-5 rounded">
+                    <canvas id="myChart4" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Yes', 'No', 'Maybe'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        var myChart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: ['Yes', 'No', 'Maybe'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        var ctx3 = document.getElementById('myChart3').getContext('2d');
+        var myChart3 = new Chart(ctx3, {
+            type: 'doughnut',
+            data: {
+                labels: ['Yes', 'No', 'Maybe'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        var ctx4 = document.getElementById('myChart4').getContext('2d');
+        var myChart4 = new Chart(ctx4, {
+            type: 'polarArea',
+            data: {
+                labels: ['Yes', 'No', 'Maybe'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+   </script>
 
 </body>
 
