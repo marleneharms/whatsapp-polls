@@ -9,11 +9,12 @@
     <title>WhatsPoll</title>
 </head>
 
-<body  class="bg-gray-900 text-white">
+<body class="bg-gray-900 text-white">
 
     <header class="text-white-700 body-font">
         <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-            <a class="flex title-font font-medium items-center text-white-900 mb-4 md:mb-0" href="/index.html" target="_blank">
+            <a class="flex title-font font-medium items-center text-white-900 mb-4 md:mb-0" href="/index.html"
+                target="_blank">
                 <!-- Whatsapp SVG -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
                     class="bi bi-whatsapp" viewBox="0 0 16 16">
@@ -32,11 +33,30 @@
 
     <main class="container mx-auto p-5">
         <!-- Individual poll report with chart js -->
-        <h1 class="font-bold text-xl md:text-3xl mb-2 text-indigo-600">User Engagement Poll</h1>
-        <p> Number of people: 10 <br>
-            Group: Interns <br>
-            Created: 10/10/2022
-        </p>
+        <div class="flex flex-col">
+            <div class="flex flex-row justify-between">
+                <h1 class="text-indigo-500 text-3xl font-bold">User Engagement Poll</h1>
+                <!-- Details -->
+                <div class="flex flex-col">
+                    <div class="flex flex-row">
+                        <p class="text-gray-500">Group:</p>
+                        <p class="text-gray-500 ml-2">Interns</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="text-gray-500"># of people</p>
+                        <p class="text-gray-500 ml-2">10</p>
+                    </div>
+                    <div class="flex flex-row">
+                        <p class="text-gray-500">Created on</p>
+                        <p class="text-gray-500 ml-2">10/10/2022</p>
+                    </div>
+                </div>
+                <button class="bg-green-700 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                    Export
+                </button>
+
+            </div>
+        </div>
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/2 p-5">
                 <div class="bg-gray-800 p-5 rounded">
@@ -182,7 +202,7 @@
                 }
             }
         });
-   </script>
+    </script>
 
 </body>
 
