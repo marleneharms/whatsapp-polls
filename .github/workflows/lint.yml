@@ -24,16 +24,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-        working-directory: ./backend
+        working-directory: backend
 
       # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
         run: npm ci
-        working-directory: ./backend
+        working-directory: backend
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
           prettier: true
-        working-directory: ./backend
+        working-directory: backend
