@@ -16,6 +16,9 @@ jobs:
   run-linters:
     name: Run linters
     runs-on: ubuntu-latest
+  defaults:
+    run:
+      working-directory: backend
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
