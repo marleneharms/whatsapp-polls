@@ -7,7 +7,7 @@ async function login({username, password}, callback) {
 
   if (user != null) {
     if (bcrypt.compareSync(password, user.password)) {
-      const token = auth.generateAccessToken(username);
+      const token = auth.generateAccessToken(user);
       return callback(null, {...user.toJSON(), token});
     } else {
       return callback({
@@ -23,7 +23,6 @@ async function login({username, password}, callback) {
 
 async function register(params, callback) {
   if (params.username === undefined) {
-    console.log(params.username);
     return callback(
         {
           message: 'Username Required',

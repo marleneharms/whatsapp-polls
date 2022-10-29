@@ -8,7 +8,11 @@ const unless = require('express-unless');
 
 const dotenv = require('dotenv');
 
+const cors = require('cors');
+
 dotenv.config();
+
+app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 
@@ -40,9 +44,11 @@ app.use(
 app.use(express.json());
 
 app.use('/users', require('./routes/users.routes'));
+app.use('/polls', require('./routes/polls.routes'));
 
 app.use(errors.errorHandler);
 
 app.listen(PORT, function() {
-  console.log('Ready to Go!');
+  console.log('Server is running on Port: ', PORT);
+  console.log('http://localhost:' + PORT);
 });
