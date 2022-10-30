@@ -54,10 +54,31 @@ exports.testWhats = (req, res, next) => {
                 "messaging_product": "whatsapp",
                 "recipient_type": "individual",
                 "to": "523315997504",
-                "type": "text",
-                "text": { // texto del mensaje
-                    "preview_url": false,
-                    "body": JSON.stringify(dummyPolls[0]["questions"])
+                "type": "interactive",
+                "interactive": {
+                    "type": "button",
+                    "body": {
+                        "text": dummyPolls[0].questions[0].question
+                    },
+                    "action": {
+                        "buttons": [
+                            {
+                                "type": "reply",
+                                "reply": {
+                                    "id": "UNIQUE_BUTTON_ID_1",
+                                    "title": dummyPolls[0].questions[0].options[0]
+                                }
+                            },
+                            {
+                                "type": "reply",
+                                "reply": {
+                                    "id": "UNIQUE_BUTTON_ID_2",
+                                    "title": dummyPolls[0].questions[0].options[1]
+                                }
+                            }
+                        ]
+                    }
+
                 }
             })
     };
