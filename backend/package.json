@@ -20,7 +20,8 @@
     "mongoose": "^6.0.10",
     "mongoose-unique-validator": "^3.0.0",
     "nodemon": "^2.0.14",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "eslint": "^8.24.0",

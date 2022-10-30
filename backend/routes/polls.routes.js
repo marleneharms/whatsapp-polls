@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.get("/", pollsController.getAllPolls);
 
+router.get("/testWhats", pollsController.testWhats);
+
 module.exports = router;
