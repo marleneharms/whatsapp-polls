@@ -18,27 +18,27 @@ const PORT = process.env.PORT || 5000;
 
 mongoose.Promise = global.Promise;
 mongoose
-    .connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then(
-        () => {
-          console.log('Database connected');
-        },
-        (error) => {
-          console.log('Database can\'t be connected: ' + error);
-        },
-    );
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(
+    () => {
+      console.log('Database connected');
+    },
+    (error) => {
+      console.log('Database can\'t be connected: ' + error);
+    },
+  );
 
 auth.authenticateToken.unless = unless;
 app.use(
-    auth.authenticateToken.unless({
-      path: [
-        {url: '/users/login', methods: ['POST']},
-        {url: '/users/register', methods: ['POST']},
-      ],
-    }),
+  auth.authenticateToken.unless({
+    path: [
+      { url: '/users/login', methods: ['POST'] },
+      { url: '/users/register', methods: ['POST'] },
+    ],
+  }),
 );
 
 app.use(express.json());
@@ -48,7 +48,7 @@ app.use('/polls', require('./routes/polls.routes'));
 
 app.use(errors.errorHandler);
 
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log('Server is running on Port: ', PORT);
   console.log('http://localhost:' + PORT);
 });
