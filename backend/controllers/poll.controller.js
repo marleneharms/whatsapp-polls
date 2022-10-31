@@ -1,7 +1,5 @@
 const pollServices = require('../services/poll.services');
 
-const dummyPhones = ['523333549944', '523333864523', '523317072870', '523315997504']
-
 exports.getAllPolls = (req, res, next) => {
     pollServices.index((err, polls) => {
         if (err){
