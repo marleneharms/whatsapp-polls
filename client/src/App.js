@@ -39,7 +39,16 @@ function App() {
                             </Link>
                         </li>
                     )}
+
+                    {currentUser && (
+                        <li className="nav-item">
+                            <Link to={"/people"} className="nav-link">
+                                People
+                            </Link>
+                        </li>
+                    )}
                 </div>
+
 
                 {currentUser ? (
                     <div className="navbar-nav ms-auto">

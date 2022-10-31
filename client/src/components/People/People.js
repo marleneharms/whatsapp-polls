@@ -2,13 +2,18 @@ import { useState, useEffect } from "react";
 import peopleService from "../../services/people.service";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import formatDistance from 'date-fns/formatDistance'
+
+import './People.styles.css'
+
 
 export default function People() {
   const [people, setPeople] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [formVisible, setFormVisible] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState(undefined);
 
   const navigate = useNavigate();
 
@@ -36,6 +41,11 @@ export default function People() {
   const handleCreatePeople = async (e) => {
     e.preventDefault();
 
+    if (name === "" || phone === "" || email === "") {
+      setError("Please fill in all fields");
+      return;
+    }
+
     const data = {
       name,
       phone,
@@ -45,11 +55,14 @@ export default function People() {
     try {
       await peopleService.createPeople(data).then(
         () => {
-          setVisible(false);
+          setFormVisible(false);
           window.location.reload();
         },
         (error) => {
-          console.log(error);
+          if (error.response.status === 500 || error.response.data.message !== undefined) {
+            console.log(error.response.data.message);
+            setError(error.response.data.message);
+          }
         }
       );
     } catch (error) {
@@ -59,7 +72,6 @@ export default function People() {
 
   // handle delete people
   const handleDeletePeople = async (id) => {
-    console.log(id);
     try {
       await peopleService.deletePeople(id).then(
         () => {
@@ -74,51 +86,88 @@ export default function People() {
     }
   };
 
+  const handleGetPeopleById = async (id) => {
+    try {
+      await peopleService.getPeopleById(id).then(
+        (response) => {
+          console.log(response.data.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const convertDate = (date) => {
+    return formatDistance(new Date(date), new Date());
+  };
+
   return (
-    <div>
+    <div className="people-container">
       <h1>People</h1>
-      <button onClick={() => setVisible(!visible)}>Add People</button>
-      {visible && (
-        <div>
-          <h2>Add new</h2>
-          <form>
-            <input
-              type="text"
-              placeholder="Name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              type="tel"
-              placeholder="Phone number"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button onClick={handleCreatePeople}>Create</button>
-          </form>
-        </div>
+      <button onClick={() => setFormVisible(!formVisible)} className="createBtn">
+        {formVisible ? "Hide" : "Create People"}
+      </button>
+      {formVisible && (
+        <form onSubmit={handleCreatePeople} className="create-person-form">
+          <h2>Create</h2>
+          <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          {
+            error && (
+              <div role="alert" className="errorMsg">
+                {error}
+              </div>
+            )
+          }
+
+          <button type="submit">Create</button>
+        </form>
       )}
 
-      <div>
-        {people.map((person) => {
-          return (
-            <div key={person.id}>
-              <h2>{person.name}</h2>
-              <h4>{person.phone}</h4>
-              <h4>{person.email}</h4>
-              <button onClick={() => handleDeletePeople(person.id)}>Delete</button>
+      <div className="people">
+        {
+          people.map((person) => (
+            <div className="person" key={person.id}>
+              <div className="person-preview">
+                <h6>person</h6>
+                <h2>{person.name}</h2>
+                <button className="delete" onClick={() => handleDeletePeople(person.id)}>Delete</button>
+              </div>
+              <div className="person-info">
+                <h6>{convertDate(person.date)}</h6>
+                <h2>{person.phone}</h2>
+                <div className="poll-info-bottom">
+                  <div className="poll-info-bottom-left">
+                    <h6>{person.email}</h6>
+                  </div>
+                </div>
+
+                <button className="btn" onClick={() => handleGetPeopleById(person.id)}>See More</button>
+              </div>
             </div>
-          );
-        })}
+          ))
+        }
       </div>
     </div>
   );
