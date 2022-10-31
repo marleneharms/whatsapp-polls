@@ -46,6 +46,7 @@ app.use(express.json());
 app.use('/users', require('./routes/users.routes'));
 app.use('/polls', require('./routes/polls.routes'));
 app.use('/people', require('./routes/people.routes'));
+app.use('/whatsapp', require('./routes/whatsapp.routes'));
 
 app.use(errors.errorHandler);
 
