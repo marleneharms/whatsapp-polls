@@ -7,7 +7,7 @@ const getAllPolls = () => {
     return axios.get(`${API_URL}/all`  , { headers: authHeader() });
 }
 
-const getPollbyId = (id) => {
+const getPollById = (id) => {
     return axios.get(`${API_URL}/${id}`, { headers: authHeader() });
 }
 
@@ -21,7 +21,7 @@ const deletePoll = (id) => {
 
 const pollService = {
     getAllPolls,
-    getPollbyId,
+    getPollById,
     createPoll,
     deletePoll
 };
