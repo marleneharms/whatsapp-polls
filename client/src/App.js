@@ -5,6 +5,7 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Home from "./components/Home/Home";
 import Polls from "./components/Polls/Polls";
+import People from "./components/People/People";
 
 function App() {
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -75,6 +76,7 @@ function App() {
                     <Route path="/polls" element={<Polls />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/people" element={<People />} />
                 </Routes>
             </div>
         </div>
