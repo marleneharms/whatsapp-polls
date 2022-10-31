@@ -50,7 +50,8 @@ app.use('/whatsapp', require('./routes/whatsapp.routes'));
 
 app.use(errors.errorHandler);
 
-app.listen(PORT, function () {
-  console.log('Server is running on Port: ', PORT);
-  console.log('http://localhost:' + PORT);
+//Be ready to heroku deployment
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
 });
