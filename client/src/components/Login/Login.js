@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import authService from "../../services/auth.service";
 
+import './Login.styles.css'
+
 export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState(undefined);
 
     const navigate = useNavigate();
 
@@ -14,11 +17,15 @@ export default function Login() {
         try {
             await authService.login(username, password).then(
                 () => {
+                    setError(undefined);
                     navigate("/");
                     window.location.reload();
                 },
                 (error) => {
-                    console.log(error);
+                    if (error.response.status === 500 || error.response.data.message !== undefined) {
+                        console.log(error.response.data.message);
+                        setError(error.response.data.message);
+                    }
                 }
             );
         } catch (error) {
@@ -27,22 +34,43 @@ export default function Login() {
     };
 
     return (
-        <div>
+        <div className="login-box">
+            <h2>Login</h2>
             <form onSubmit={handleLogin}>
-                <h3>Login</h3>
-                <input
-                    type="text"
-                    placeholder="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button type="submit">Log in</button>
+                <div className="user-box">
+
+                    <input
+                        type="text"
+                        placeholder="username"
+                        required
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
+                <div className="user-box">
+                    <input
+                        type="password"
+                        placeholder="password"
+                        value={password}
+                        required
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+
+                {/* Set notification on error  */}
+                {error && (
+                    <div role="alert" className="errorMsg" >
+                        {error}
+                    </div>
+                )}
+
+                <button type="submit">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Log in
+                </button>
             </form>
         </div>
     );
