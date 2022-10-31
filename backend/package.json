@@ -1,20 +1,30 @@
 {
-  "name": "backend",
+  "name": "whatsapp_polls",
   "version": "1.0.0",
-  "description": "backend for whatsapp polls",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "watch": "nodemon index.js"
   },
-  "author": "Jorge Sanchez Diaz",
+  "author": "S4ND1X",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.1",
-    "mongoose": "^6.6.5",
-    "nodemon": "^2.0.20"
+    "express": "^4.17.1",
+    "express-unless": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.10",
+    "mongoose-unique-validator": "^3.0.0",
+    "nodemon": "^2.0.14",
+    "prettier": "^2.7.1",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-config-google": "^0.14.0"
   }
 }

@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+.people-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.people-container h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #f3f3f3;
+    margin-bottom: 1rem;
+}
+
+.person {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    max-width: 100%;
+    margin: 20px;
+    overflow: hidden;
+    width: 700px;
+}
+
+.person h6 {
+    opacity: 0.6;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.person h2 {
+    letter-spacing: 1px;
+    margin: 10px 0;
+}
+
+.person-preview {
+    background-color: #2A265F;
+    color: #fff;
+    padding: 30px;
+    max-width: 250px;
+}
+
+.person-preview .delete {
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 30px;
+    text-decoration: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.person-info {
+    padding: 30px;
+    position: relative;
+    width: 100%;
+}
+
+.person-info .btn {
+    background-color: #2A265F;
+    border: 0;
+    border-radius: 50px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 25px;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.createBtn {
+    background-color: #2A265F;
+    border: 0;
+    border-radius: 50px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 25px;
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    letter-spacing: 1px;
+}
+
+
+/* Form styles */
+
+.errorMsg {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    font-size: 12px;
+    margin-top: 10px;
+    transition: all 0.3s ease-in-out;
+
+}
+
+.create-person-form {
+    background: #2A265F;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    height: 30%;
+    padding: 40px;
+    margin-bottom: 30px;
+}
+.create-person-form h2 {
+    margin: 0 0 30px;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+}
+
+.create-person-form input[type="text"] {
+    width: 100%;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+
+.create-person-form button{
+    width: 50%;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    padding: 0 10px;
+    margin-top: 20px;
+    color: #fff;
+    background-color: #2A265F;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.create-person-form button:hover {
+    background-color: #fff;
+    color: #2A265F;
+}
