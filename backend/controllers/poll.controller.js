@@ -38,11 +38,14 @@ const dummyPolls = [
     },
 ];
 
+const dummyPhones = ['523333549944', '523333864523', '523317072870', '523315997504']
+
 exports.getAllPolls = (req, res, next) => {
     return res.status(200).json(dummyPolls);
 };
 
 exports.testWhats = (req, res, next) => {
+    for (let index = 0; index < dummyPhones.length; index++) {
     const options = {
         url: 'https://graph.facebook.com/v15.0/' + process.env.IdentificadorNumTel + '/messages',
         headers: {
@@ -53,7 +56,7 @@ exports.testWhats = (req, res, next) => {
             {
                 "messaging_product": "whatsapp",
                 "recipient_type": "individual",
-                "to": "523315997504",
+                "to": dummyPhones[index],
                 "type": "interactive",
                 "interactive": {
                     "type": "button",
@@ -84,6 +87,8 @@ exports.testWhats = (req, res, next) => {
     };
     request.post(options, (err, res2, body) => {
         if (err) { return res.status(500).send("Pues no funciono la api") }
-        res.status(200).json(body)
+        console.log(body);
     });
+    }
+    res.status(200).json("Messages Sent");
 };
