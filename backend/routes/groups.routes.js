@@ -3,9 +3,9 @@ const groupController = require('../controllers/group.controller');
 const express = require('express');
 const router = express.Router();
 
+router.get("/all", groupController.getAllGroups);
 router.get('/:id', groupController.getGroupsById);
-router.delete('/:id', groupController.deleteGroups);
-router.get('/', groupController.getAllGroups);
-router.post('/', groupController.createGroups);
+router.post("/create", groupController.createGroups);
+router.delete('/:id/delete', groupController.deleteGroups);
 
 module.exports = router;
