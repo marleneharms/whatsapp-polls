@@ -47,6 +47,7 @@ app.use('/users', require('./routes/users.routes'));
 app.use('/polls', require('./routes/polls.routes'));
 app.use('/people', require('./routes/people.routes'));
 app.use('/whatsapp', require('./routes/whatsapp.routes'));
+app.use('groups', require('./routes/groups.routes'));
 
 app.use(errors.errorHandler);
 
