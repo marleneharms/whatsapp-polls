@@ -6,6 +6,7 @@ import Register from "./components/Register/Register";
 import Home from "./components/Home/Home";
 import Polls from "./components/Polls/Polls";
 import People from "./components/People/People";
+import Groups from "./components/Groups/Groups";
 
 function App() {
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -44,6 +45,14 @@ function App() {
                         <li className="nav-item">
                             <Link to={"/people"} className="nav-link">
                                 People
+                            </Link>
+                        </li>
+                    )}
+
+                    {currentUser && (
+                        <li className="nav-item">
+                            <Link to={"/groups"} className="nav-link">
+                                Groups
                             </Link>
                         </li>
                     )}
@@ -86,6 +95,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/people" element={<People />} />
+                    <Route path="/groups" element={<Groups />} />
                 </Routes>
             </div>
         </div>
