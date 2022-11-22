@@ -56,6 +56,23 @@ function transmit(question, possibleAnswers, phone, callback) {
     });
 }
 
+function retrive(callback) {
+
+    const mode = "subscribe"
+
+    const token = process.env.Token;
+
+    const url = 'http://localhost:3000/dev/webhook?hub.mode=' + mode + '&hub.verify_token=' + token;
+
+    request.get(url, (err, res, body) => {
+        if (err) {
+            return callback(err);
+        }
+        return callback(null, body);
+    });
+}
+
 module.exports = {
-    transmit
+    transmit,
+    retrive
 };
