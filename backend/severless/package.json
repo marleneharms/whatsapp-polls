@@ -1,0 +1,21 @@
+{
+  "name": "severless",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "graceful-fs": "^4.2.10",
+    "mongodb": "^4.12.1",
+    "serverless-http": "^3.1.0",
+    "serverless-offline": "^11.6.0"
+  },
+  "devDependencies": {
+    "serverless-plugin-include-dependencies": "^5.0.0"
+  }
+}

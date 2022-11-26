@@ -19,12 +19,3 @@ exports.sendPollToAll = (req, res, next) => {
         });
     });
 }
-
-exports.webhook = (res) => {
-    whatsappServices.retrive(question, options, phone, (error, results) => {
-        if (error) {
-            return next(error);
-            }
-            return res.status(200).json(results);
-    });
-}
