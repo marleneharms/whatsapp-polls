@@ -57,5 +57,5 @@ function transmit(question, possibleAnswers, phone, callback) {
 }
 
 module.exports = {
-    transmit
+    transmit,
 };
