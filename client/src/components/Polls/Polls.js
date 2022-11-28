@@ -6,6 +6,7 @@ import whatsappService from "../../services/whatsapp.service";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import formatDistance from 'date-fns/formatDistance'
+import { notifyError, notifySuccess, notifySuccessWithCallback, notifyWarning } from "../../utils/Toast";
 
 import './Polls.styles.css'
 
@@ -36,12 +37,10 @@ export default function Polls() {
     useEffect(() => {
         pollService.getAllPolls().then(
             (response) => {
-
                 setPolls(response.data.data);
             },
             (error) => {
-                console.log("Private page", error.response);
-                console.log(error);
+                notifyError("You are not authorized to view this page");
                 // Invalid token
                 if (error.response && error.response.status === 401) {
                     authService.logout();
@@ -53,12 +52,10 @@ export default function Polls() {
 
         peopleService.getAllPeople().then(
             (response) => {
-
                 setPeople(response.data.data);
             },
             (error) => {
-                console.log("Private page", error.response);
-                console.log(error);
+                notifyError("You are not authorized to view this page");
                 // Invalid token
                 if (error.response && error.response.status === 401) {
                     authService.logout();
@@ -73,8 +70,7 @@ export default function Polls() {
                 setGroups(response.data.data);
             },
             (error) => {
-                console.log("Private page", error.response);
-                console.log(error);
+                notifyError("You are not authorized to view this page");
                 // Invalid token
                 if (error.response && error.response.status === 401) {
                     authService.logout();
@@ -90,9 +86,9 @@ export default function Polls() {
 
         // validate form
         if (!newPoll.title || !newPoll.question || !newPoll.options) {
-            alert("Please fill all the fields");
+            notifyWarning("Please fill in all fields");
             return;
-        }
+        } 
 
         // Check if he chose a group or individual numbers
         if (newPoll.group === undefined) {
@@ -111,25 +107,32 @@ export default function Polls() {
                         group: undefined
                     });
                     setFormVisible(false);
+                    notifySuccess(`${response.data.data.title.toUpperCase()} created successfully`);
 
                     // Send whatsapp message
                     whatsappService.sendWhatsappPoll(response.data.data).then(
                         (response) => {
                             console.log(response);
+                            notifySuccess("Poll sent trough whatsapp successfully");
                         },
                         (error) => {
                             console.log(error);
+                            notifyError("There was an error sending the poll through whatsapp");
                         }
                     );
                 },
                 (error) => {
                     if (error.response.status === 500 || error.response.data.message !== undefined) {
-                        console.log(error.response.data.message);
-                        setError(error.response.data.message);
+                        const { message } = error.response.data;
+                        notifyError(message);
+                        setError(message);
                     }
 
                 }
-            );
+            ).catch((error) => {
+                const { message } = error.response.data;
+                notifyError(message);
+            });
         } else {
             //get all the numbers from the group
             groupService.getGroupById(newPoll.group).then(
@@ -153,21 +156,25 @@ export default function Polls() {
                                 group: undefined
                             });
                             setFormVisible(false);
+                            notifySuccess(`${response.data.data.title.toUpperCase()} created successfully`);
 
                             // Send whatsapp message
                             whatsappService.sendWhatsappPoll(response.data.data).then(
                                 (response) => {
                                     console.log(response);
+                                    notifySuccess("Poll sent trough whatsapp successfully");
                                 },
                                 (error) => {
                                     console.log(error);
+                                    notifyError("There was an error sending the poll through whatsapp");
                                 }
                             );
                         },
                         (error) => {
                             if (error.response.status === 500 || error.response.data.message !== undefined) {
-                                console.log(error.response.data.message);
-                                setError(error.response.data.message);
+                                const { message } = error.response.data;
+                                notifyError(message);
+                                setError(message);
                             }
 
                         }
@@ -180,11 +187,11 @@ export default function Polls() {
     function handleDelete(id) {
         pollService.deletePoll(id).then(
             (response) => {
-                console.log(response);
                 setPolls(polls.filter((poll) => poll.id !== id));
+                notifySuccess(`${response.data.data.title.toUpperCase()} deleted successfully`);
             },
             (error) => {
-                console.log(error);
+                notifyError("There was an error deleting the poll");
             }
         );
     }

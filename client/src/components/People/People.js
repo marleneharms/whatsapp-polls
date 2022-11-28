@@ -1,18 +1,21 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect } from "react";
 import peopleService from "../../services/people.service";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import formatDistance from 'date-fns/formatDistance'
 
 import './People.styles.css'
+import { notifyError, notifySuccess, notifySuccessWithCallback, notifyWarning } from "../../utils/Toast";
 
 
 export default function People() {
   const [people, setPeople] = useState([]);
   const [formVisible, setFormVisible] = useState(false);
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [newPerson, setNewPerson] = useState({
+    name: "",
+    phone: "",
+    email: "",
+  });
   const [error, setError] = useState(undefined);
 
   const navigate = useNavigate();
@@ -20,12 +23,10 @@ export default function People() {
   useEffect(() => {
     peopleService.getAllPeople().then(
       (response) => {
-        console.log(response.data.data);
         setPeople(response.data.data);
       },
       (error) => {
-        console.log("Private page", error.response);
-        console.log(error);
+        notifyWarning("You are not authorized to view this page");
         // Invalid token
         if (error.response && error.response.status === 401) {
           authService.logout();
@@ -36,68 +37,56 @@ export default function People() {
     );
   }, []);
 
-  // handle create people using form
-
   const handleCreatePeople = async (e) => {
     e.preventDefault();
 
+    const { name, phone, email } = newPerson;
+
     if (name === "" || phone === "" || email === "") {
       setError("Please fill in all fields");
+      notifyWarning("Please fill in all fields");
       return;
     }
 
-    const data = {
-      name,
-      phone,
-      email,
-    };
-
     try {
-      await peopleService.createPeople(data).then(
-        () => {
+      await peopleService.createPeople({name, phone, email}).then(
+        (response) => {
+          setPeople([...people, response.data.data]);
+          setNewPerson({
+            name: "",
+            phone: "",
+            email: "",
+          });
           setFormVisible(false);
-          window.location.reload();
+          setError(undefined);
+          notifySuccess(`${response.data.data.name.toUpperCase()} created successfully`);
         },
         (error) => {
           if (error.response.status === 500 || error.response.data.message !== undefined) {
-            console.log(error.response.data.message);
-            setError(error.response.data.message);
+            const { message } = error.response.data;
+            setError(message);
+            notifyError(message);
           }
         }
       );
     } catch (error) {
-      console.log(error);
+      notifyError("There was an error creating the people. Please try again later");
     }
   };
 
-  // handle delete people
   const handleDeletePeople = async (id) => {
     try {
       await peopleService.deletePeople(id).then(
-        () => {
-          window.location.reload();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleGetPeopleById = async (id) => {
-    try {
-      await peopleService.getPeopleById(id).then(
         (response) => {
-          console.log(response.data.data);
+          setPeople(people.filter((people) => people.id !== id));
+          notifySuccess(`${response.data.data.name.toUpperCase()} deleted successfully`);
         },
         (error) => {
-          console.log(error);
+          notifyError(error.response.data.message);
         }
       );
     } catch (error) {
-      console.log(error);
+      notifyError("There was an error deleting the people. Please try again later");
     }
   };
 
@@ -106,9 +95,8 @@ export default function People() {
   };
 
   return (
-    <Fragment>
-      <h1>People</h1>
       <div className="people-container">
+        <h1>People</h1>
         <button onClick={() => setFormVisible(!formVisible)} className="createBtn">
           {formVisible ? "Hide" : "Create People"}
         </button>
@@ -118,20 +106,20 @@ export default function People() {
             <input
               type="text"
               placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={newPerson.name}
+              onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
             />
             <input
               type="text"
               placeholder="Phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              value={newPerson.phone}
+              onChange={(e) => setNewPerson({ ...newPerson, phone: e.target.value })}
             />
             <input
               type="text"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={newPerson.email}
+              onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
             />
 
             {
@@ -169,6 +157,5 @@ export default function People() {
           }
         </div>
       </div>
-    </Fragment>
   );
 }

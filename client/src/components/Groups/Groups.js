@@ -5,6 +5,7 @@ import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
 import "./Groups.styles.css";
+import { notifyError, notifySuccess, notifySuccessWithCallback, notifyWarning } from "../../utils/Toast";
 
 export default function Groups() {
     const [groups, setGroups] = useState([]);
@@ -21,12 +22,10 @@ export default function Groups() {
     useEffect(() => {
         groupService.getAllGroups().then(
             (response) => {
-                console.log(response.data.data);
                 setGroups(response.data.data);
             },
             (error) => {
-                console.log("Private page", error.response);
-                console.log(error);
+                notifyError("You are not authorized to view this page");
                 // Invalid token
                 if (error.response && error.response.status === 401) {
                     authService.logout();
@@ -38,12 +37,10 @@ export default function Groups() {
 
         peopleService.getAllPeople().then(
             (response) => {
-                console.log(response.data.data);
                 setPeople(response.data.data);
             },
             (error) => {
-                console.log("Private page", error.response);
-                console.log(error);
+                notifyError("You are not authorized to view this page");
                 // Invalid token
                 if (error.response && error.response.status === 401) {
                     authService.logout();
@@ -58,23 +55,28 @@ export default function Groups() {
         e.preventDefault();
         // validate form
         if (newGroup.name === "" || newGroup.people.length === 0) {
+            notifyWarning("Please fill in all fields");
             setError("Please fill all the fields");
             return;
         }
 
         groupService.createGroup(newGroup).then(
             (response) => {
-                console.log(response.data.data);
                 setGroups([...groups, response.data.data]);
                 setNewGroup({
                     name: "",
                     people: [],
                 });
                 setFormVisible(false);
+                setError(undefined);
+                notifySuccessWithCallback(`${newGroup.name.toUpperCase()} created successfully`, () => {
+                    window.location.reload();
+                });
             },
             (error) => {
-                console.log(error);
-                setError(error.response.data.message);
+                const { message } = error.response.data;
+                setError(message);
+                notifyError(message);
             }
         );
     }
@@ -82,11 +84,11 @@ export default function Groups() {
     function handleDelete(id) {
         groupService.deleteGroup(id).then(
             (response) => {
-                console.log(response);
+                notifySuccess(`${response.data.data.name.toUpperCase()} deleted successfully`);
                 setGroups(groups.filter((group) => group.id !== id));
             },
             (error) => {
-                console.log(error);
+                notifyError("There was an error deleting the group");
             }
         );
     }
@@ -163,7 +165,6 @@ export default function Groups() {
                 {groups.map((group) => (
                     <div className="group" key={group.id}>
                         <div className="group-preview">
-                            <h6>Group</h6>
                             <h2>{group.name}</h2>
                             <button
                                 className="delete"
@@ -174,6 +175,11 @@ export default function Groups() {
                         </div>
                         <div className="group-info">
                             <h6>{group.people.length} members</h6>
+                            <ul>
+                                {group.people.map((person, index) => (
+                                    <li key={`${person.id}${index}`}>{person.name}</li>
+                                ))}
+                            </ul>
                             {/* <button
                                 className="btn"
                                 onClick={() => handleGetGroupById(group.id)}
