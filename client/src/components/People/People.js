@@ -107,19 +107,27 @@ export default function People() {
               type="text"
               placeholder="Name"
               value={newPerson.name}
-              onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
+              maxLength="17"
+              required
+              onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value.trim() })}
             />
+            {/* validate only numbers on phone */}
             <input
               type="text"
-              placeholder="Phone"
+              placeholder="Phone Number"
               value={newPerson.phone}
-              onChange={(e) => setNewPerson({ ...newPerson, phone: e.target.value })}
+              maxLength="12"
+              minLength="12"
+              pattern="[0-9]*"
+              required
+              onChange={(e) => setNewPerson({ ...newPerson, phone: e.target.value.trim() })}
             />
             <input
               type="text"
               placeholder="Email"
               value={newPerson.email}
-              onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
+              required
+              onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value.trim() })}
             />
 
             {
