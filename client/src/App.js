@@ -7,6 +7,7 @@ import Home from "./components/Home/Home";
 import Polls from "./components/Polls/Polls";
 import People from "./components/People/People";
 import Groups from "./components/Groups/Groups";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
     const [currentUser, setCurrentUser] = useState(undefined);
@@ -96,6 +97,8 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/people" element={<People />} />
                     <Route path="/groups" element={<Groups />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="*" element={<h1>404 Not Found</h1>} />
                 </Routes>
             </div>
         </div>
