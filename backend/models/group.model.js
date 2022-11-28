@@ -6,6 +6,7 @@ const GroupSchema = new Schema({
     name: {
         type: String,
         required: true,
+        unique: true
     },
     people: [{ type: Schema.Types.ObjectId, ref: 'people' }],
 });

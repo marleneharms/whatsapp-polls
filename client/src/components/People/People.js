@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import peopleService from "../../services/people.service";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
@@ -106,69 +106,69 @@ export default function People() {
   };
 
   return (
-    <div className="people-container">
+    <Fragment>
       <h1>People</h1>
-      <button onClick={() => setFormVisible(!formVisible)} className="createBtn">
-        {formVisible ? "Hide" : "Create People"}
-      </button>
-      {formVisible && (
-        <form onSubmit={handleCreatePeople} className="create-person-form">
-          <h2>Create</h2>
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+      <div className="people-container">
+        <button onClick={() => setFormVisible(!formVisible)} className="createBtn">
+          {formVisible ? "Hide" : "Create People"}
+        </button>
+        {formVisible && (
+          <form onSubmit={handleCreatePeople} className="create-person-form">
+            <h2>Create</h2>
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
+            {
+              error && (
+                <div role="alert" className="errorMsg">
+                  {error}
+                </div>
+              )
+            }
+
+            <button type="submit">Create</button>
+          </form>
+        )}
+
+        <div className="people">
           {
-            error && (
-              <div role="alert" className="errorMsg">
-                {error}
-              </div>
-            )
-          }
-
-          <button type="submit">Create</button>
-        </form>
-      )}
-
-      <div className="people">
-        {
-          people.map((person) => (
-            <div className="person" key={person.id}>
-              <div className="person-preview">
-                <h6>person</h6>
-                <h2>{person.name}</h2>
-                <button className="delete" onClick={() => handleDeletePeople(person.id)}>Delete</button>
-              </div>
-              <div className="person-info">
-                <h6>{convertDate(person.date)}</h6>
-                <h2>{person.phone}</h2>
-                <div className="poll-info-bottom">
-                  <div className="poll-info-bottom-left">
-                    <h6>{person.email}</h6>
+            people.map((person) => (
+              <div className="person" key={person.id}>
+                <div className="person-preview">
+                  <h6>person</h6>
+                  <h2>{person.name}</h2>
+                  <button className="delete" onClick={() => handleDeletePeople(person.id)}>Delete</button>
+                </div>
+                <div className="person-info">
+                  <h6>{convertDate(person.date)}</h6>
+                  <h2>{person.phone}</h2>
+                  <div className="poll-info-bottom">
+                    <div className="poll-info-bottom-left">
+                      <h6>{person.email}</h6>
+                    </div>
                   </div>
                 </div>
-
-                <button className="btn" onClick={() => handleGetPeopleById(person.id)}>See More</button>
               </div>
-            </div>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 }

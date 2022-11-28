@@ -52,7 +52,7 @@ export default function Groups() {
                 }
             }
         );
-    });
+    }, []);
 
     function handleCreateGroup(e) {
         e.preventDefault();
@@ -83,7 +83,7 @@ export default function Groups() {
         groupService.deleteGroup(id).then(
             (response) => {
                 console.log(response);
-                setGroups(groups.filter((group) => group._id !== id));
+                setGroups(groups.filter((group) => group.id !== id));
             },
             (error) => {
                 console.log(error);
@@ -95,7 +95,7 @@ export default function Groups() {
         groupService.getGroupById(id).then(
             (response) => {
                 console.log(response);
-                setGroups(groups.filter((group) => group._id !== id));
+                setGroups(groups.filter((group) => group.id !== id));
             },
             (error) => {
                 console.log(error);
@@ -143,7 +143,7 @@ export default function Groups() {
                         }}
                     >
                         {people.map((person) => (
-                            <option key={person._id} value={person._id}>
+                            <option key={person.id} value={person.id}>
                                 {person.name}
                             </option>
                         ))}
@@ -161,26 +161,26 @@ export default function Groups() {
 
             <div className="groups">
                 {groups.map((group) => (
-                    <div className="group" key={group._id}>
+                    <div className="group" key={group.id}>
                         <div className="group-preview">
                             <h6>Group</h6>
                             <h2>{group.name}</h2>
                             <button
                                 className="delete"
-                                onClick={() => handleDelete(group._id)}
+                                onClick={() => handleDelete(group.id)}
                             >
                                 Delete
                             </button>
                         </div>
                         <div className="group-info">
                             <h6>{group.people.length} members</h6>
-                            <button
+                            {/* <button
                                 className="btn"
-                                onClick={() => handleGetGroupById(group._id)}
+                                onClick={() => handleGetGroupById(group.id)}
                             >
                                 {" "}
                                 See more
-                            </button>
+                            </button> */}
                         </div>
                     </div>
                 ))}
