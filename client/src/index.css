@@ -1,10 +1,24 @@
-html {
-    height: 100%;
-}
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 
-body {
+html{
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
-    background: linear-gradient(#141e30, #243b55);
+    box-sizing: border-box;
+    font-family: 'Muli', sans-serif;
+    height: 100%;
+    width: 100%;
+    background: #141e30;
+}
+
+body{
+    height: 100%;
+    background: #141e30;
+}
+
+.body-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: #141e30;
 }

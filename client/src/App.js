@@ -88,7 +88,7 @@ function App() {
                 )}
             </nav>
 
-            <div className="container mt-3">
+            <div className="body-container">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/polls" element={<Polls />} />
