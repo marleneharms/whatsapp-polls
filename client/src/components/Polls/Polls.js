@@ -4,7 +4,7 @@ import peopleService from "../../services/people.service";
 import groupService from "../../services/group.service"
 import whatsappService from "../../services/whatsapp.service";
 import authService from "../../services/auth.service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatDistance from 'date-fns/formatDistance'
 import { notifyError, notifySuccess, notifySuccessWithCallback, notifyWarning } from "../../utils/Toast";
 
@@ -196,17 +196,6 @@ export default function Polls() {
         );
     }
 
-    function handleGetPollById(id) {
-        pollService.getPollById(id).then(
-            (response) => {
-                console.log(response.data.data);
-            },
-            (error) => {
-                console.log(error);
-            }
-        );
-    }
-
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
     }
@@ -340,7 +329,7 @@ export default function Polls() {
                                         </div>
                                     ))
                                 }
-                                <button className="btn" onClick={() => handleGetPollById(poll.id)}>See More</button>
+                                <Link to={`/dashboard?pollId=${poll.id}`} className="btn">View Results</Link>
                             </div>
                         </div>
                     ))
