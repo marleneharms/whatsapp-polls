@@ -10,6 +10,14 @@ const GroupSchema = new Schema({
     people: [{ type: Schema.Types.ObjectId, ref: 'people' }],
 });
 
+GroupSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    }
+})
+
 GroupSchema.plugin(uniqueValidator, { message: 'Group name already in use.' });
 
 const Group = mongoose.model('group', GroupSchema);
