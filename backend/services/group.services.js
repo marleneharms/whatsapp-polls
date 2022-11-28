@@ -30,7 +30,7 @@ async function create(params, callback){
 }
 
 async function show(id, callback){
-    const group = await Group.findById(id);
+    const group = await Group.findById(id).populate('people');
     if(group != null){
         return callback(null, group);
     } else {
