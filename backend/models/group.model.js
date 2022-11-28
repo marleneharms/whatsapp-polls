@@ -1,18 +1,16 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const uniqueValidator = require('mongoose-unique-validator');
-const People = require('./people.model');
-
 
 const GroupSchema = new Schema({
     name: {
         type: String,
         required: true,
     },
-    people: [ People.schema ],
+    people: [{ type: Schema.Types.ObjectId, ref: 'people' }],
 });
 
-GroupSchema.plugin(uniqueValidator, { message: 'Name already in use.' });
+GroupSchema.plugin(uniqueValidator, { message: 'Group name already in use.' });
 
 const Group = mongoose.model('group', GroupSchema);
 module.exports = Group;

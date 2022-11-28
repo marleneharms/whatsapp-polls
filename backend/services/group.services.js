@@ -1,7 +1,7 @@
 const Group = require('../models/group.model');
 
 async function index(callback){
-    const groups = await Group.find();
+    const groups = await Group.find().populate('people')
     if(groups != null){
         return callback(null, groups);
     } else {
