@@ -1,6 +1,7 @@
 import { useState } from "react";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { notifyError, notifySuccessWithCallback  } from "../../utils/Toast";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -16,17 +17,22 @@ const Register = () => {
             await authService.register(username, email, password).then(
                 () => {
                     setError(undefined);
-                    navigate("/");
-                    window.location.reload();
+                    notifySuccessWithCallback( `${username.toUpperCase()} registered succesfully` , () => {
+                        navigate("/login");
+                        window.location.reload();
+                    });
                 },
                 (error) => {
                     if (error.response.status === 500 || error.response.data.message !== undefined) {
+                        const { message } = error.response.data;
+                        console.log(message);
                         setError(error.response.data.message);
+                        notifyError(message);
                     }
                 }
             );
         } catch (err) {
-            console.log(err);
+            notifyError("There was an error registering your account. Please try again later.");
         }
     };
 
