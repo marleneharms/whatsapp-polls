@@ -284,7 +284,7 @@ export default function Polls() {
                             }}
                         >
                             {people.map((person) => (
-                                <option key={person.id} value={person.phoneNumber}>
+                                <option key={person.id} value={person.phone}>
                                     {person.name} - {person.phone}
                                 </option>
                             ))}
@@ -329,7 +329,7 @@ export default function Polls() {
                                         </div>
                                     ))
                                 }
-                                <Link to={`/dashboard?pollId=${poll.id}`} className="btn">View Results</Link>
+                                <Link to={`/dashboard?id=${poll.id}`} className="btn">View Results</Link>
                             </div>
                         </div>
                     ))
