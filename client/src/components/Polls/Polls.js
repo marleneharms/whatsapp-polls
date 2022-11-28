@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import pollService from "../../services/polls.service";
 import peopleService from "../../services/people.service";
+import groupService from "../../services/group.service"
 import whatsappService from "../../services/whatsapp.service";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +12,8 @@ import './Polls.styles.css'
 export default function Polls() {
     const [polls, setPolls] = useState([]);
     const [people, setPeople] = useState([]);
+    const [groups, setGroups] = useState([]);
+    const [selectGroup, setSelectGroup] = useState(false);
     const [error, setError] = useState(undefined);
     const [formVisible, setFormVisible] = useState(false);
     const [newPoll, setNewPoll] = useState({
@@ -24,6 +27,7 @@ export default function Polls() {
         phoneNumbers: [
 
         ],
+        group: undefined
     });
 
 
@@ -32,7 +36,7 @@ export default function Polls() {
     useEffect(() => {
         pollService.getAllPolls().then(
             (response) => {
-                console.log(response.data.data);
+
                 setPolls(response.data.data);
             },
             (error) => {
@@ -49,8 +53,24 @@ export default function Polls() {
 
         peopleService.getAllPeople().then(
             (response) => {
-                console.log(response.data.data);
+
                 setPeople(response.data.data);
+            },
+            (error) => {
+                console.log("Private page", error.response);
+                console.log(error);
+                // Invalid token
+                if (error.response && error.response.status === 401) {
+                    authService.logout();
+                    navigate("/login");
+                    window.location.reload();
+                }
+            }
+        );
+
+        groupService.getAllGroups().then(
+            (response) => {
+                setGroups(response.data.data);
             },
             (error) => {
                 console.log("Private page", error.response);
@@ -69,44 +89,92 @@ export default function Polls() {
         e.preventDefault();
 
         // validate form
-        if (!newPoll.title || !newPoll.question || !newPoll.options || !newPoll.phoneNumbers) {
+        if (!newPoll.title || !newPoll.question || !newPoll.options) {
             alert("Please fill all the fields");
             return;
         }
 
-        pollService.createPoll(newPoll).then(
-            (response) => {
-                setPolls([...polls, response.data.data]);
-                setNewPoll({
-                    title: "",
-                    question: "",
-                    options: [
-                        "",
-                        "",
-                        "",
-                    ],
-                    phoneNumbers: [],
-                });
-                setFormVisible(false);
+        // Check if he chose a group or individual numbers
+        if (newPoll.group === undefined) {
+            pollService.createPoll(newPoll).then(
+                (response) => {
+                    setPolls([...polls, response.data.data]);
+                    setNewPoll({
+                        title: "",
+                        question: "",
+                        options: [
+                            "",
+                            "",
+                            "",
+                        ],
+                        phoneNumbers: [],
+                        group: undefined
+                    });
+                    setFormVisible(false);
 
-                // Send whatsapp message
-                whatsappService.sendWhatsappPoll(response.data.data).then(
-                    (response) => {
-                        console.log(response);
-                    },
-                    (error) => {
-                        console.log(error);
+                    // Send whatsapp message
+                    whatsappService.sendWhatsappPoll(response.data.data).then(
+                        (response) => {
+                            console.log(response);
+                        },
+                        (error) => {
+                            console.log(error);
+                        }
+                    );
+                },
+                (error) => {
+                    if (error.response.status === 500 || error.response.data.message !== undefined) {
+                        console.log(error.response.data.message);
+                        setError(error.response.data.message);
                     }
-                );
-            },
-            (error) => {
-                if (error.response.status === 500 || error.response.data.message !== undefined) {
-                    console.log(error.response.data.message);
-                    setError(error.response.data.message);
-                }
 
-            }
-        );
+                }
+            );
+        } else {
+            //get all the numbers from the group
+            groupService.getGroupById(newPoll.group).then(
+                (response) => {
+                    let group = response.data.data;
+                    let numbers = group.people.map(person => person.phone);
+                    newPoll.phoneNumbers = numbers;
+                    delete newPoll.group;
+                    pollService.createPoll(newPoll).then(
+                        (response) => {
+                            setPolls([...polls, response.data.data]);
+                            setNewPoll({
+                                title: "",
+                                question: "",
+                                options: [
+                                    "",
+                                    "",
+                                    "",
+                                ],
+                                phoneNumbers: [],
+                                group: undefined
+                            });
+                            setFormVisible(false);
+
+                            // Send whatsapp message
+                            whatsappService.sendWhatsappPoll(response.data.data).then(
+                                (response) => {
+                                    console.log(response);
+                                },
+                                (error) => {
+                                    console.log(error);
+                                }
+                            );
+                        },
+                        (error) => {
+                            if (error.response.status === 500 || error.response.data.message !== undefined) {
+                                console.log(error.response.data.message);
+                                setError(error.response.data.message);
+                            }
+
+                        }
+                    );
+                }
+            )
+        }
     }
 
     function handleDelete(id) {
@@ -149,7 +217,7 @@ export default function Polls() {
 
             {formVisible && (
                 <form onSubmit={handleCreatePoll} className="create-poll-form" >
-                    <h2>Create</h2> 
+                    <h2>Create</h2>
                     <input
                         type="text"
                         placeholder="Title"
@@ -185,21 +253,47 @@ export default function Polls() {
                         setNewPoll({ ...newPoll, options });
                     }} />
 
-                    {/* Select to wich phone numbers send the form */}
-                    <select
-                        multiple
-                        value={newPoll.phoneNumbers}
-                        onChange={(e) => {
-                            const phoneNumbers = Array.from(e.target.selectedOptions, (option) => option.value);
-                            setNewPoll({ ...newPoll, phoneNumbers });
-                        }}
-                    >
-                        {people.map((person) => (
-                            <option key={person.id} value={person.phoneNumber}>
-                                {person.phone}
-                            </option>
-                        ))}
-                    </select>
+                    {/* If checkbox is marked then show group select if not show single number select */}
+
+                    <div className="checkbox-container">
+                        <input type="checkbox" id="group" name="group" value={selectGroup} onChange={(e) => {
+                            setSelectGroup(e.target.checked);
+                            setNewPoll({ ...newPoll, group: undefined, phoneNumbers: [] });
+                        }} />
+                        <label htmlFor="group">Group</label>
+                    </div>
+
+                    {selectGroup ? (
+                        <select
+                            value={newPoll.group}
+                            onChange={(e) => {
+                                const group = e.target.value;
+                                setNewPoll({ ...newPoll, group });
+                            }}
+                        >
+                            <option value="">Select a group</option>
+                            {groups.map((group) => (
+                                <option key={group.id} value={group.id}>
+                                    {group.name} - {group.people.length} members
+                                </option>
+                            ))}
+                        </select>
+                    ) : (
+                        <select
+                            multiple
+                            value={newPoll.phoneNumbers}
+                            onChange={(e) => {
+                                const phoneNumbers = Array.from(e.target.selectedOptions, (option) => option.value);
+                                setNewPoll({ ...newPoll, phoneNumbers });
+                            }}
+                        >
+                            {people.map((person) => (
+                                <option key={person.id} value={person.phoneNumber}>
+                                    {person.name} - {person.phone}
+                                </option>
+                            ))}
+                        </select>
+                    )}
 
                     {/* Set notification on error  */}
                     {error && (
@@ -239,7 +333,7 @@ export default function Polls() {
                                         </div>
                                     ))
                                 }
-                                <button className="btn" onClick={()=>handleGetPollById(poll.id)}>See More</button>
+                                <button className="btn" onClick={() => handleGetPollById(poll.id)}>See More</button>
                             </div>
                         </div>
                     ))
